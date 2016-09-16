@@ -13,20 +13,36 @@ window.onload = function ()
 	}
 
 };
+function getStyle(obj,name) 
+{
+	
+	if (obj.currentStyle) 
+	{
+		//IE低版本
+		return obj.currentStyle[name];
+	}
+	else 
+	{
+		//FF等浏览器
+		return getComputedStyle(obj,null)[name]; 
+		//getComputedStyle函数中，第二个参数无用，任意设置
+	}
+}
 function bufMov(obj,iTar) 
 {
 	clearInterval(obj.timer);
 	obj.timer = setInterval(function () {
-		var speed = (iTar-obj.offsetWidth)/10;
+		var realWidth = parseInt(getStyle(obj,'width'));
+		var speed = (iTar-realWidth)/10;
 		speed = speed>0?Math.ceil(speed):Math.floor(speed);
 
-		if (obj.offsetWidth == iTar) 
+		if (realWidth == iTar) 
 		{
 			clearInterval(obj.timer);
 		}
 		else
 		{
-			obj.style.width = obj.offsetWidth+speed+'px';
+			obj.style.width = realWidth+speed+'px';
 		}
 	}, 15);
 }
